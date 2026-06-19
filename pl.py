@@ -8,14 +8,16 @@ st.subheader("Función objetivo")
 
 gan_folleto = st.number_input(
     "Ganancia por folleto",
-    value=25,
-    step=1
+    value=25.0,
+    step=0.1,
+    format="%.1f"
 )
 
 gan_afiche = st.number_input(
     "Ganancia por afiche",
-    value=50,
-    step=1
+    value=50.0,
+    step=0.1,
+    format="%.1f"
 )
 
 st.subheader("Restricciones")
@@ -34,14 +36,16 @@ hojas_afiche = st.number_input(
 
 costo_folleto = st.number_input(
     "Costo por folleto",
-    value=15,
-    step=1
+    value=15.0,
+    step=0.1,
+    format="%.1f"
 )
 
 costo_afiche = st.number_input(
     "Costo por afiche",
-    value=40,
-    step=1
+    value=40.0,
+    step=0.1,
+    format="%.1f"
 )
 
 max_impresos = st.number_input(
@@ -58,8 +62,9 @@ min_hojas = st.number_input(
 
 max_costo = st.number_input(
     "Costo máximo",
-    value=2000,
-    step=1
+    value=2000.0,
+    step=0.1,
+    format="%.1f"
 )
 
 variables_enteras = st.checkbox(
@@ -94,12 +99,17 @@ if st.button("Resolver"):
         integrality=[1, 1] if variables_enteras else [0, 0]
     )
 
-    if res.success:
-        st.success("Problema resuelto")
+    st.subheader("Solución")
 
-        st.write(f"Ganancia máxima: {-res.fun:.2f}")
-        st.write(f"Folletos: {res.x[0]:.4f}")
-        st.write(f"Afiches: {res.x[1]:.4f}")
+    if res.success:
+        st.write(f"**Ganancia máxima:** {-res.fun:.2f}")
+
+        if variables_enteras:
+            st.write(f"**Folletos:** {round(res.x[0])}")
+            st.write(f"**Afiches:** {round(res.x[1])}")
+        else:
+            st.write(f"**Folletos:** {res.x[0]:.4f}")
+            st.write(f"**Afiches:** {res.x[1]:.4f}")
 
     else:
         st.error("No se encontró una solución factible.")
