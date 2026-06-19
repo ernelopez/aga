@@ -4,68 +4,72 @@ from scipy.optimize import milp, LinearConstraint, Bounds
 
 st.title("Problema de producción")
 
-st.subheader("Función objetivo")
+col1, col2 = st.columns(2)
 
-gan_folleto = st.number_input(
-    "Ganancia por folleto",
-    value=25.0,
-    step=0.1,
-    format="%.1f"
-)
+with col1:
+    st.subheader("Función objetivo")
 
-gan_afiche = st.number_input(
-    "Ganancia por afiche",
-    value=50.0,
-    step=0.1,
-    format="%.1f"
-)
+    gan_folleto = st.number_input(
+        "Ganancia por folleto",
+        value=25.0,
+        step=0.1,
+        format="%.1f"
+    )
 
-st.subheader("Restricciones")
+    gan_afiche = st.number_input(
+        "Ganancia por afiche",
+        value=50.0,
+        step=0.1,
+        format="%.1f"
+    )
 
-hojas_folleto = st.number_input(
-    "Hojas por folleto",
-    value=4,
-    step=1
-)
+with col2:
+    st.subheader("Restricciones")
 
-hojas_afiche = st.number_input(
-    "Hojas por afiche",
-    value=6,
-    step=1
-)
+    hojas_folleto = st.number_input(
+        "Hojas por folleto",
+        value=4,
+        step=1
+    )
 
-costo_folleto = st.number_input(
-    "Costo por folleto",
-    value=15.0,
-    step=0.1,
-    format="%.1f"
-)
+    hojas_afiche = st.number_input(
+        "Hojas por afiche",
+        value=6,
+        step=1
+    )
 
-costo_afiche = st.number_input(
-    "Costo por afiche",
-    value=40.0,
-    step=0.1,
-    format="%.1f"
-)
+    costo_folleto = st.number_input(
+        "Costo por folleto",
+        value=15.0,
+        step=0.1,
+        format="%.1f"
+    )
 
-max_impresos = st.number_input(
-    "Máximo de impresos",
-    value=90,
-    step=1
-)
+    costo_afiche = st.number_input(
+        "Costo por afiche",
+        value=40.0,
+        step=0.1,
+        format="%.1f"
+    )
 
-min_hojas = st.number_input(
-    "Mínimo de hojas requeridas",
-    value=390,
-    step=1
-)
+    max_impresos = st.number_input(
+        "Máximo de impresos",
+        value=90,
+        step=1
+    )
 
-max_costo = st.number_input(
-    "Costo máximo",
-    value=2000.0,
-    step=0.1,
-    format="%.1f"
-)
+    min_hojas = st.number_input(
+        "Mínimo de hojas requeridas",
+        value=390,
+        step=1
+    )
+
+    max_costo = st.number_input(
+        "Costo máximo",
+        value=2000.0,
+        step=0.1,
+        format="%.1f"
+    )
 
 variables_enteras = st.checkbox(
     "Resolver con variables enteras",
@@ -86,11 +90,7 @@ if st.button("Resolver"):
     bu = [max_impresos, np.inf, max_costo]
 
     constraints = LinearConstraint(A, bl, bu)
-
-    bounds = Bounds(
-        [0, 0],
-        [np.inf, np.inf]
-    )
+    bounds = Bounds([0, 0], [np.inf, np.inf])
 
     res = milp(
         c=c,
@@ -110,6 +110,5 @@ if st.button("Resolver"):
         else:
             st.write(f"**Folletos:** {res.x[0]:.4f}")
             st.write(f"**Afiches:** {res.x[1]:.4f}")
-
     else:
         st.error("No se encontró una solución factible.")
